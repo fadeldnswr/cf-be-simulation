@@ -9,7 +9,11 @@ from fastapi.responses import JSONResponse
 from datetime import date
 from typing import Dict, Any
 from dotenv import load_dotenv
-from src.api.controller.telegram_controller import parse_text, fingerprint
+
+from src.api.controller.telegram_controller import (
+  parse_text, fingerprint, 
+  todays_spend
+)
 from src.api.db.supabase_config import insert_data_to_supabase
 
 # Load environment variables
@@ -97,3 +101,11 @@ async def telegram_webhook(request: Request) -> JSONResponse:
     })
   except Exception as e:
     raise HTTPException(status_code=500, detail=str(e))
+
+# Define routes to get sum of todays spend
+@router.get("/today")
+async def todays_spend(chat_id:str) -> Dict[str, Any]:
+  try:
+    return todays_spend(chat_id=chat_id)
+  except Exception as e:
+    return HTTPException(status_code=500, detail=str(e))

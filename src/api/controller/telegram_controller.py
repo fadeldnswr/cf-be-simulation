@@ -2,14 +2,17 @@
 Telegram controller for handling Telegram bot interactions.
 Consists several functions for processing incoming messages, sending replies, and managing user sessions.
 '''
-import os, sys, hashlib
+import os, sys, hashlib, httpx
 from dotenv import load_dotenv
 from typing import Dict, Any
 from src.exception.exception import CustomException
+from datetime import date
 
 # Load telegram bot token
 load_dotenv()
 TELEGRAM_BOT_TOKEN = os.getenv("CASH_SIM_BOT")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_SERVICE_ROLE = os.getenv("SUPABASE_SERVICE_ROLE")
 
 # Define categories and modes
 CATS = {"transport","food","misc","bill"}
@@ -58,5 +61,26 @@ def fingerprint(
   try:
     s = f"{user_id}|{dt}|{amount}|{category}|{mode}|{note or ' '}"
     return hashlib.sha256(s.encode()).hexdigest()
+  except Exception as e:
+    raise CustomException(e, sys)
+
+# Define function to sum todays spend
+async def todays_spend(chat_id:str) -> Dict[str, Any]:
+  try:
+    headers = {
+      "apiKey": SUPABASE_SERVICE_ROLE,
+      "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE}",
+      "Prefer": "resolution=ignore-duplicate,return=minimal",
+      "Content-Type": "application/json",
+    }
+    dt = date
+    url = f"{SUPABASE_URL}/rest/v1/daily_expenses"
+    q = f"?user_id=eq.{chat_id}&date=eq.{dt.today():%Y-%m-%d}&select=amount_idr"
+    async with httpx.AsyncClient() as client:
+      response = await client.get(url+q, headers=headers); response.raise_for_status()
+    total = sum(amount["amount_idr"] for amount in response.json())
+    return {
+      "today_spend": total
+    }
   except Exception as e:
     raise CustomException(e, sys)
