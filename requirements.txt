@@ -6,3 +6,4 @@ ipykernel
 httpx
 python-dotenv
 setuptools
+python-telegram-bot

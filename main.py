@@ -4,6 +4,7 @@ Creates the FastAPI application and includes all necessary routes and middleware
 '''
 
 from fastapi import FastAPI
+from src.api.router.telegram_api import router as telegram_route
 
 # Define app instance
 app = FastAPI(
@@ -11,6 +12,9 @@ app = FastAPI(
   description="API for analyzing cashflow simulations",
   version="0.1.0"
 )
+
+# Define router for telegram API
+app.include_router(telegram_route, prefix="/telegram", tags=["Telegram"])
 
 # Define home routes
 @app.get("/")

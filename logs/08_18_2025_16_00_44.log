@@ -1,0 +1,5 @@
+[ 2025-08-18 16:04:42,234 ] 1740 httpx - INFO - HTTP Request: POST https://wzzakiukemwhtqvbocgo.supabase.co/rest/v1/daily_expenses?on_conflict=fingerprint "HTTP/1.1 400 Bad Request"
+[ 2025-08-18 16:04:43,874 ] 1740 httpx - INFO - HTTP Request: POST https://wzzakiukemwhtqvbocgo.supabase.co/rest/v1/daily_expenses?on_conflict=fingerprint "HTTP/1.1 400 Bad Request"
+[ 2025-08-18 16:05:07,974 ] 1740 httpx - INFO - HTTP Request: POST https://wzzakiukemwhtqvbocgo.supabase.co/rest/v1/daily_expenses?on_conflict=fingerprint "HTTP/1.1 400 Bad Request"
+[ 2025-08-18 16:06:52,317 ] 1740 httpx - INFO - HTTP Request: POST https://wzzakiukemwhtqvbocgo.supabase.co/rest/v1/daily_expenses?on_conflict=fingerprint "HTTP/1.1 201 Created"
+[ 2025-08-18 16:10:18,608 ] 1740 httpx - INFO - HTTP Request: POST https://wzzakiukemwhtqvbocgo.supabase.co/rest/v1/daily_expenses?on_conflict=fingerprint "HTTP/1.1 201 Created"
