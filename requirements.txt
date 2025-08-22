@@ -7,3 +7,4 @@ httpx
 python-dotenv
 setuptools
 python-telegram-bot
+pandas
