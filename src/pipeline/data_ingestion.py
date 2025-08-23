@@ -30,26 +30,46 @@ class DataIngestion:
     self.data = None
   
   def fetch_data_from_supabase(self, user_id: str, start_date: date, end_date: date) -> List[Dict[str, Any]]:
+    '''
+    Function to fetch historical data from supabase
+    params:
+    - user_id: The ID of the user to fetch data for
+    - start_date: The start date for the data fetch
+    - end_date: The end date for the data fetch
+    return:
+    - List of dictionaries containing the fetched data
+    '''
     try:
       # Define supabase response
+      logging.info("Initialize data fetch from Supabase")
       response = self.supabase.table("daily_expenses").select("*").eq("user_id", user_id) \
         .gte("date", start_date.isoformat()).lte("date", end_date.isoformat()).execute()
       # Create response data
       self.data = response.data
+      logging.info(f"Data fetch successful with {len(self.data)} records")
       # Check if not data available
       if not self.data:
         logging.warning(f"No data found for user {user_id} between {start_date} to {end_date}")
         return []
+      logging.info("Data fetch from Supabase completed")
       return self.data
     except Exception as e:
       raise CustomException(e, sys)
   
   def convert_data_to_dataframe(self) -> pd.DataFrame:
+    '''
+    Function to convert fetched data to Dataframe format
+    return:
+    - pd.DataFrame: A DataFrame containing the fetched data
+    '''
     try:
+      # Convert response data to dataframe
       df = pd.DataFrame(self.data)
+      # Check if dataframe is empty
       if df.empty:
         logging.warning("No data to convert to DataFrame format")
-        return pd.DataFrame()
+        return pd.DataFrame() # Return empty dataframe
+      logging.info(f"Data successfully converted to DataFrame format {df.head()}")
       return df
     except Exception as e:
       raise CustomException(e, sys)
